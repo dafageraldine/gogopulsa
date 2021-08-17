@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:gogopulsa/class.dart';
 import 'package:gogopulsa/mainpage/prabayar/kereta/detailpemesanankereta.dart';
-import 'package:intl/intl.dart';
 
-import '../../../class.dart';
-
-class Formpenumpang extends StatefulWidget {
+class Datapemesan extends StatefulWidget {
   @override
-  _FormpenumpangState createState() => _FormpenumpangState();
+  _DatapemesanState createState() => _DatapemesanState();
 }
 
-class _FormpenumpangState extends State<Formpenumpang> {
-  var tgls = "Masukkan Tanggal lahir";
+class _DatapemesanState extends State<Datapemesan> {
   TextEditingController nama = new TextEditingController();
-  TextEditingController id = new TextEditingController();
   TextEditingController hp = new TextEditingController();
 
-  addpenumpang() {
-    datapenumpangkereta
-        .add(Penumpangkereta(nama.text, id.text, hp.text, tgls, "adult"));
-    print(datapenumpangkereta.length);
+  adddatapemesan() {
+    datapemesan.clear();
+    datapemesan.add(Pemesan(nama.text, hp.text));
     Navigator.of(context, rootNavigator: true)
         .push(MaterialPageRoute(builder: (context) => Detailpemesanankereta()));
   }
@@ -65,7 +60,7 @@ class _FormpenumpangState extends State<Formpenumpang> {
                         width: width * 0.05,
                       ),
                       Text(
-                        "FORM PENUMPANG",
+                        "DATA PEMESAN",
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: width * 0.04,
@@ -96,22 +91,7 @@ class _FormpenumpangState extends State<Formpenumpang> {
             Padding(
               padding: EdgeInsets.only(left: width * 0.1),
               child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text("Nomor Identitas")),
-            ),
-            Container(
-                width: width * 0.85,
-                height: width * 0.15,
-                child: TextFormField(
-                  controller: id,
-                )),
-            SizedBox(
-              height: width * 0.05,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: width * 0.1),
-              child:
-                  Align(alignment: Alignment.centerLeft, child: Text("No HP")),
+                  alignment: Alignment.centerLeft, child: Text("Nomor HP")),
             ),
             Container(
                 width: width * 0.85,
@@ -119,56 +99,12 @@ class _FormpenumpangState extends State<Formpenumpang> {
                 child: TextFormField(
                   controller: hp,
                 )),
-            SizedBox(
-              height: width * 0.05,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: width * 0.1),
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text("Tanggal Lahir")),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: width * 0.05, left: width * 0.1),
-              child: InkWell(
-                onTap: () {
-                  print("tapped");
-                  showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2021),
-                          lastDate: DateTime(2100))
-                      .then((date) {
-                    tgls = DateFormat('y-LL-d').format(date);
-                    setState(() {});
-                  });
-                },
-                child: Row(
-                  children: [
-                    Text(
-                      tgls,
-                      style: TextStyle(
-                          color: Colors.grey[600],
-                          fontFamily: 'Opensans',
-                          fontSize: width * 0.036),
-                    ),
-                    SizedBox(
-                      width: width * 0.05,
-                    ),
-                    Icon(
-                      Icons.edit,
-                      size: width * 0.034,
-                      color: Colors.grey[600],
-                    )
-                  ],
-                ),
-              ),
-            ),
             Padding(
               padding: EdgeInsets.only(top: width * 0.1),
               child: InkWell(
                 onTap: () {
-                  addpenumpang();
+                  adddatapemesan();
+                  // addpenumpang();
                 },
                 child: Container(
                   width: width * 0.85,

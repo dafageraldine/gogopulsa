@@ -37,31 +37,9 @@ class _BottomState extends State<Bottom> {
     return true;
   }
 
-  Future getaccesstoken() async {
-    String token = DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now());
-    var secure = md5
-        .convert(utf8
-            .encode(token + md5.convert(utf8.encode("1HHHDUH184")).toString()))
-        .toString();
-
-    var body = json.encode(
-        {"userID": "1HT8DUH184", "securityCode": secure, "token": token});
-
-    http.Response tes =
-        await http.post(Uri.parse(linkapipesawathotel + "/Session/Login"),
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: body);
-    accesstoken.clear();
-    var tokenz = json.decode(tes.body);
-    accesstoken.add(Token(tokenz["accessToken"]));
-  }
-
   var currindex = 0;
   @override
   void initState() {
-    getaccesstoken();
     super.initState();
   }
 

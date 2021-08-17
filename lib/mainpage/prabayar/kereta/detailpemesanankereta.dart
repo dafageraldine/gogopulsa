@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:gogopulsa/class.dart';
+import 'package:gogopulsa/mainpage/prabayar/kereta/datapemesan.dart';
 import 'package:gogopulsa/mainpage/prabayar/kereta/formpenumpang.dart';
 
 class Detailpemesanankereta extends StatefulWidget {
@@ -8,6 +12,52 @@ class Detailpemesanankereta extends StatefulWidget {
 }
 
 class _DetailpemesanankeretaState extends State<Detailpemesanankereta> {
+  createbooking() async {
+    var body = {
+      "bookingKeyRequest": bookedtrain[0].bookingkey,
+      "trainID": "KAI",
+      "origin": datapesankereta[0].origin,
+      "destination": datapesankereta[0].destination,
+      "departDate": datapesankereta[0].depart,
+      "paxAdult": vgadult.toString(),
+      "pakChild": "0",
+      "paxInfant": vginfant.toString(),
+      "trainNumber": datapesankereta[0].trainumber,
+      "contactName": datapemesan[0].nama,
+      "contactPhone": datapemesan[0].hp,
+      "subClass": datapesankereta[0].subclass,
+      "availabilityClass": datapesankereta[0].availclass,
+      "passengers": datapenumpangkereta
+    };
+    String bodyenc = jsonEncode(body);
+    var url = baseurl + 'public/api/data/kereta/booking';
+    http.Response ceks = await http.post(Uri.parse(url),
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+          'apiKey':
+              '632e93023886160a2a5494cd49aeb72994fc61f6834355d175a423b99715a9df',
+        },
+        body: bodyenc);
+    var data = json.decode(ceks.body);
+    print(data);
+  }
+
+  getseatmap() {
+    var body = {
+      "origin": datapesankereta[0].origin,
+      "destination": datapesankereta[0].destination,
+      "departDate": "2021-08-03T20:00:00",
+      "trainNumber": datapesankereta[0].trainumber,
+      "subClass": datapesankereta[0].subclass,
+      "paxAdult": vgadult.toString(),
+      "paxChild": "0",
+      "paxInfant": vginfant.toString(),
+      "bookingKeyRequest": bookedtrain[0].bookingkey,
+      "bookingCode": "H6OC4U",
+      "bookingDate": "2021-07-28"
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -22,7 +72,6 @@ class _DetailpemesanankeretaState extends State<Detailpemesanankereta> {
                   width: width,
                   height: height * 0.13,
                   color: Color.fromRGBO(0, 142, 151, 1),
-                  // child: ,
                 ),
                 Padding(
                   padding:
@@ -80,7 +129,7 @@ class _DetailpemesanankeretaState extends State<Detailpemesanankereta> {
                     alignment: Alignment.centerLeft,
                     child: Container(
                       width: width * 0.8,
-                      height: width * 0.22,
+                      height: width * 0.28,
                       decoration: BoxDecoration(
                           color: Colors.white,
                           boxShadow: [
@@ -124,15 +173,6 @@ class _DetailpemesanankeretaState extends State<Detailpemesanankereta> {
                             Row(
                               children: [
                                 Text(
-                                  trainclassdata[0].trainame +
-                                      " " +
-                                      trainclassdata[0].trainumber,
-                                  style: TextStyle(fontSize: width * 0.03),
-                                ),
-                                SizedBox(
-                                  width: width * 0.02,
-                                ),
-                                Text(
                                   vgdepart,
                                   style: TextStyle(fontSize: width * 0.03),
                                 ),
@@ -159,7 +199,20 @@ class _DetailpemesanankeretaState extends State<Detailpemesanankereta> {
                                   style: TextStyle(fontSize: width * 0.034),
                                 )
                               ],
-                            )
+                            ),
+                            SizedBox(
+                              height: width * 0.02,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  trainclassdata[0].trainame +
+                                      " " +
+                                      trainclassdata[0].trainumber,
+                                  style: TextStyle(fontSize: width * 0.03),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
@@ -198,18 +251,25 @@ class _DetailpemesanankeretaState extends State<Detailpemesanankereta> {
                       Padding(
                         padding: EdgeInsets.only(
                             left: width * 0.55, top: width * 0.03),
-                        child: Container(
-                          width: width * 0.15,
-                          height: width * 0.08,
-                          decoration: BoxDecoration(
-                              color: Color.fromRGBO(0, 142, 151, 1),
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Center(
-                              child: Text(
-                            "Edit",
-                            style: TextStyle(
-                                color: Colors.white, fontSize: width * 0.034),
-                          )),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context, rootNavigator: true).push(
+                                MaterialPageRoute(
+                                    builder: (context) => Datapemesan()));
+                          },
+                          child: Container(
+                            width: width * 0.15,
+                            height: width * 0.08,
+                            decoration: BoxDecoration(
+                                color: Color.fromRGBO(0, 142, 151, 1),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Center(
+                                child: Text(
+                              "Edit",
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: width * 0.034),
+                            )),
+                          ),
                         ),
                       ),
                       Column(
@@ -217,7 +277,9 @@ class _DetailpemesanankeretaState extends State<Detailpemesanankereta> {
                           Row(
                             children: [
                               Text(
-                                "Nama : Dafa Geraldine",
+                                datapemesan.isEmpty
+                                    ? "Nama : "
+                                    : "Nama : " + datapemesan[0].nama,
                                 style: TextStyle(fontSize: width * 0.03),
                               ),
                             ],
@@ -228,7 +290,9 @@ class _DetailpemesanankeretaState extends State<Detailpemesanankereta> {
                           Row(
                             children: [
                               Text(
-                                "NoHP : 08778232123",
+                                datapemesan.isEmpty
+                                    ? "NoHP : "
+                                    : "NoHP : " + datapemesan[0].hp,
                                 style: TextStyle(fontSize: width * 0.03),
                               )
                             ],
@@ -304,7 +368,12 @@ class _DetailpemesanankeretaState extends State<Detailpemesanankereta> {
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      "Nama : Dafa Geraldine",
+                                      datapenumpangkereta.isEmpty
+                                          ? "Nama : "
+                                          : datapenumpangkereta.length >= i + 1
+                                              ? "Nama : " +
+                                                  datapenumpangkereta[i].nama
+                                              : "Nama : ",
                                       style: TextStyle(fontSize: width * 0.034),
                                     ),
                                   ),
@@ -317,7 +386,12 @@ class _DetailpemesanankeretaState extends State<Detailpemesanankereta> {
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      "ID : 3578291807990002",
+                                      datapenumpangkereta.isEmpty
+                                          ? "ID : "
+                                          : datapenumpangkereta.length >= i + 1
+                                              ? "ID : " +
+                                                  datapenumpangkereta[i].id
+                                              : "ID : ",
                                       style: TextStyle(fontSize: width * 0.034),
                                     ),
                                   ),
@@ -330,7 +404,12 @@ class _DetailpemesanankeretaState extends State<Detailpemesanankereta> {
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      "tanggal lahir : 16-07-1999",
+                                      datapenumpangkereta.isEmpty
+                                          ? "Tanggal Lahir : "
+                                          : datapenumpangkereta.length >= i + 1
+                                              ? "Tanggal Lahir : " +
+                                                  datapenumpangkereta[i].birth
+                                              : "Tanggal Lahir : ",
                                       style: TextStyle(fontSize: width * 0.034),
                                     ),
                                   ),
@@ -344,7 +423,13 @@ class _DetailpemesanankeretaState extends State<Detailpemesanankereta> {
                                     child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          "NoHp: 029748912794719",
+                                          datapenumpangkereta.isEmpty
+                                              ? "No HP : "
+                                              : datapenumpangkereta.length >=
+                                                      i + 1
+                                                  ? "No HP : " +
+                                                      datapenumpangkereta[i].hp
+                                                  : "No HP : ",
                                           style: TextStyle(
                                               fontSize: width * 0.034),
                                         )))
@@ -367,28 +452,33 @@ class _DetailpemesanankeretaState extends State<Detailpemesanankereta> {
             SizedBox(
               height: width * 0.03,
             ),
-            Container(
-              width: width * 0.8,
-              height: width * 0.16,
-              decoration: BoxDecoration(
-                color: Colors.orange[500],
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey[400],
-                      spreadRadius: 3,
-                      blurRadius: 5,
-                      offset: Offset(0, 3))
-                ],
+            InkWell(
+              onTap: () {
+                createbooking();
+              },
+              child: Container(
+                width: width * 0.8,
+                height: width * 0.16,
+                decoration: BoxDecoration(
+                  color: Colors.orange[500],
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey[400],
+                        spreadRadius: 3,
+                        blurRadius: 5,
+                        offset: Offset(0, 3))
+                  ],
+                ),
+                child: Center(
+                    child: Text(
+                  "Pilih Kursi",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Opensansbold',
+                      fontSize: width * 0.038),
+                )),
               ),
-              child: Center(
-                  child: Text(
-                "Pilih Kursi",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Opensansbold',
-                    fontSize: width * 0.038),
-              )),
             ),
             SizedBox(
               height: width * 0.05,
