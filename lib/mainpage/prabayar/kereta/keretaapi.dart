@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gogopulsa/class.dart';
+import 'package:gogopulsa/mainpage/prabayar/kereta/listkereta.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
@@ -60,9 +61,51 @@ class _KeretaapiState extends State<Keretaapi> {
               '632e93023886160a2a5494cd49aeb72994fc61f6834355d175a423b99715a9df',
         },
         body: body);
-    print(ceks.body);
+    var data = json.decode(ceks.body);
+    bookedtrain.clear();
     print(body);
-    print(url);
+    print(data['data']['bookingKeyRequest']);
+    bookedtrain.add(Bookingkereta(data['data']['bookingKeyRequest'],
+        data['data']['originFull'], data['data']['destinationFull']));
+    keretaclass.clear();
+    listkereta.clear();
+    // print(data['data']['listData'][0]);
+    var listlength = data['data']['listData'].length;
+    for (var i = 0; i < listlength; i++) {
+      listkereta.add(Listkereta(
+          data['data']['listData'][i]['trainNumber'],
+          data['data']['listData'][i]['trainName'],
+          data['data']['listData'][i]['departTime'],
+          data['data']['listData'][i]['arrivalTime']));
+      for (var j = 0;
+          j < data['data']['listData'][i]['availibilityClasses'].length;
+          j++) {
+        keretaclass.add(Classeskereta(
+            data['data']['listData'][i]['trainNumber'],
+            data['data']['listData'][i]['availibilityClasses'][j]['subClass'],
+            data['data']['listData'][i]['availibilityClasses'][j]
+                ['availabilityStatus'],
+            data['data']['listData'][i]['availibilityClasses'][j]
+                ['availabilityClass'],
+            data['data']['listData'][i]['availibilityClasses'][j]['price']
+                .toString(),
+            data['data']['listData'][i]['availibilityClasses'][j]
+                    ['pricePerAdult']
+                .toString()));
+      }
+    }
+    vgadult = int.parse(adult.text);
+    vginfant = int.parse(infant.text);
+    vgori = selectedpilihan.origin;
+    vgdesti = selected.destination;
+
+    Navigator.of(context, rootNavigator: true)
+        .push(MaterialPageRoute(builder: (context) => Keretacard()));
+    // print(data['data']['listData'].length);
+
+    // print(ceks.body);
+    // print(body);
+    // print(url);
   }
 
   @override

@@ -4,10 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gogopulsa/class.dart';
 import 'package:gogopulsa/mainpage/pascabayar/bpjs.dart';
 import 'package:gogopulsa/mainpage/prabayar/dataseluler.dart';
-import 'package:gogopulsa/mainpage/prabayar/keretaapi.dart';
+import 'package:gogopulsa/mainpage/prabayar/kereta/keretaapi.dart';
 import 'package:gogopulsa/mainpage/prabayar/plntoken.dart';
-import 'package:gogopulsa/mainpage/prabayar/pulsaseluler.dart';
-import 'package:gogopulsa/mainpage/subpageprabayar/subpesawat/pesawat.dart';
+import 'package:gogopulsa/mainpage/prabayar/subpulsaseluler/pulsaseluler.dart';
 import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
@@ -16,33 +15,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  Future getpesawat() async {
-    var url = linkapipesawathotel + "/Airline/List";
-    print(url);
-    var body = {
-      "userID": "1HT8DUH184",
-      "accessToken": accesstoken[0].access.toString(),
-      // "airlineID": "QZ"
-    };
-    http.Response tes = await http.post(Uri.parse(url),
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
-        body: body);
-    print(tes.body);
-    var tokenz = json.decode(tes.body);
-    allairline.clear();
-    for (var i = 0; i < tokenz["airlines"].length; i++) {
-      allairline.add(Allairline(
-          tokenz["airlines"][i]["name"], tokenz["airlines"][i]["id"]));
-    }
-    // print(tokenz["airlines"][0]["name"]);
-    accesstoken.clear();
-    accesstoken.add(Token(tokenz["accessToken"]));
-    Navigator.of(context, rootNavigator: true)
-        .push(MaterialPageRoute(builder: (context) => Pesawat()));
-  }
-
   Future getkairoute() async {
     var oid = [];
     var did = [];
@@ -232,7 +204,9 @@ class _HomeState extends State<Home> {
                     // color: Colors.blue,
                     child: Image(
                         image: NetworkImage(
-                            "https://d17e22l2uh4h4n.cloudfront.net/corpweb/pub-xlaxiata/2020-04/1180%20x%20480-01_0.jpg")),
+                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_CsFbpQZthVUjWWsw7M4Z4aFl3e6sVR3JzA&usqp=CAU"
+                            // "https://d17e22l2uh4h4n.cloudfront.net/corpweb/pub-xlaxiata/2020-04/1180%20x%20480-01_0.jpg"
+                            )),
                   ),
                 ),
               ],
@@ -634,6 +608,7 @@ class _HomeState extends State<Home> {
                         children: [
                           InkWell(
                             onTap: () async {
+                              print("tapped");
                               await getkairoute();
                               Navigator.of(context, rootNavigator: true).push(
                                   MaterialPageRoute(
@@ -688,7 +663,7 @@ class _HomeState extends State<Home> {
                         children: [
                           InkWell(
                             onTap: () {
-                              getpesawat();
+                              // getpesawat();
                             },
                             child: Container(
                               width: width * 0.18,
