@@ -102,6 +102,22 @@ class _DetailpemesanankeretaState extends State<Detailpemesanankereta> {
         body: body);
     var data = json.decode(ceks.body);
     print(data);
+    dataseatkereta.clear();
+    for (var i = 0; i < data['data']['seats'].length; i++) {
+      for (var j = 0; j < data['data']['seats'][i]['detail'].length; j++) {
+        dataseatkereta.add(Keretaseatdata(
+            data['data']['seats'][i]['wagonCode'],
+            data['data']['seats'][i]['wagonNumber'],
+            data['data']['seats'][i]['detail'][j]['row'],
+            data['data']['seats'][i]['detail'][j]['column'],
+            int.parse(data['data']['seats'][i]['detail'][j]['seatRow']),
+            data['data']['seats'][i]['detail'][j]['seatColumn'],
+            data['data']['seats'][i]['detail'][j]['seatNumber'],
+            data['data']['seats'][i]['detail'][j]['subClass'],
+            data['data']['seats'][i]['detail'][j]['isAvailable'].toString()));
+        print(data['data']['seats'][i]['detail'][j]['seatColumn']);
+      }
+    }
   }
 
   @override

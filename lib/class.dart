@@ -1,17 +1,5 @@
 import 'package:gogopulsa/mainpage/prabayar/kereta/keretaclass.dart';
 
-class Trainorigin {
-  String origin;
-  String originfull;
-  Trainorigin(this.origin, this.originfull);
-}
-
-class Traindestination {
-  String destination;
-  String destinationfull;
-  Traindestination(this.destination, this.destinationfull);
-}
-
 class Pulsadata {
   String id;
   String kode;
@@ -42,6 +30,19 @@ class Pulsadata {
       this.isdiskon,
       this.harganet,
       this.badmin);
+}
+
+//KERETA
+class Trainorigin {
+  String origin;
+  String originfull;
+  Trainorigin(this.origin, this.originfull);
+}
+
+class Traindestination {
+  String destination;
+  String destinationfull;
+  Traindestination(this.destination, this.destinationfull);
 }
 
 class Bookingkereta {
@@ -217,7 +218,31 @@ class Bookedkeretadata {
       };
 }
 
+class Keretaseatdata {
+  String wagonCode;
+  String wagonNumber;
+  int row;
+  int column;
+  int seatrow;
+  String seatcolumn;
+  String seatnumber;
+  String subclass;
+  String isavaliable;
+  Keretaseatdata(
+      this.wagonCode,
+      this.wagonNumber,
+      this.row,
+      this.column,
+      this.seatrow,
+      this.seatcolumn,
+      this.seatnumber,
+      this.subclass,
+      this.isavaliable);
+}
+
 List<Pulsadata> pulsadata = <Pulsadata>[];
+
+//Kereta
 List<Trainorigin> kaiorigin = <Trainorigin>[];
 List<Traindestination> kaidestination = <Traindestination>[];
 List<Bookingkereta> bookedtrain = <Bookingkereta>[];
@@ -229,6 +254,7 @@ List<Penumpangkereta> datapenumpangkereta = <Penumpangkereta>[];
 List<Pemesan> datapemesan = <Pemesan>[];
 List<Penumpangkeretaseat> seatpenumpangkereta = <Penumpangkeretaseat>[];
 List<Bookedkeretadata> databookedkereta = <Bookedkeretadata>[];
+List<Keretaseatdata> dataseatkereta = <Keretaseatdata>[];
 
 var baseurl = "https://sandbox-api.sakedap.com/ppobtcel/";
 int vgadult;
