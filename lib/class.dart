@@ -126,6 +126,97 @@ class Pemesan {
   Pemesan(this.nama, this.hp);
 }
 
+class Penumpangkeretaseat {
+  String nama;
+  String id;
+  String birth;
+  String seatnumber;
+  String wagonumber;
+  String wagoncode;
+  String type;
+  String phone;
+  Penumpangkeretaseat(this.nama, this.id, this.birth, this.seatnumber,
+      this.wagonumber, this.wagoncode, this.type, this.phone);
+
+  Map toJson() => {
+        "name": nama,
+        "ID": id,
+        "birthDate": birth,
+        "seatNumber": seatnumber,
+        "wagonNumber": wagonumber,
+        "wagonCode": wagoncode,
+        "type": type,
+        "phone": phone
+      };
+}
+
+class Bookedkeretadata {
+  String bookingkey;
+  String trainID;
+  String origin;
+  String originFull;
+  String destination;
+  String destinationFull;
+  String trainNumber;
+  String subClass;
+  String availabilityClass;
+  String bookingCode;
+  String bookingDate;
+  String issuedTimeLimit;
+  String trainName;
+  String departTime;
+  String arrivalTime;
+  String ticketPrice;
+  String salesPrice;
+  String adminFee;
+  String trainMarkup;
+  String discount;
+  Bookedkeretadata(
+      this.bookingkey,
+      this.trainID,
+      this.origin,
+      this.originFull,
+      this.destination,
+      this.destinationFull,
+      this.trainNumber,
+      this.subClass,
+      this.availabilityClass,
+      this.bookingCode,
+      this.bookingDate,
+      this.issuedTimeLimit,
+      this.trainName,
+      this.departTime,
+      this.arrivalTime,
+      this.ticketPrice,
+      this.salesPrice,
+      this.adminFee,
+      this.trainMarkup,
+      this.discount);
+
+  Map toJson() => {
+        "bookingKeyRequest": bookingkey,
+        "trainID": trainID,
+        "origin": origin,
+        "originFull": originFull,
+        "destination": destination,
+        "destinationFull": destinationFull,
+        "trainNumber": trainNumber,
+        "subClass": subClass,
+        "availabilityClass": availabilityClass,
+        "bookingCode": bookingCode,
+        "bookingDate": bookingDate,
+        "issuedTimeLimit": issuedTimeLimit,
+        "trainName": trainName,
+        "departTime": departTime,
+        "arrivalTime": arrivalTime,
+        "ticketPrice": ticketPrice,
+        "salesPrice": salesPrice,
+        "adminFee": adminFee,
+        "trainMarkup": trainMarkup,
+        "discount": discount
+      };
+}
+
 List<Pulsadata> pulsadata = <Pulsadata>[];
 List<Trainorigin> kaiorigin = <Trainorigin>[];
 List<Traindestination> kaidestination = <Traindestination>[];
@@ -136,6 +227,8 @@ List<Trainclassdata> trainclassdata = <Trainclassdata>[];
 List<Datapesankereta> datapesankereta = <Datapesankereta>[];
 List<Penumpangkereta> datapenumpangkereta = <Penumpangkereta>[];
 List<Pemesan> datapemesan = <Pemesan>[];
+List<Penumpangkeretaseat> seatpenumpangkereta = <Penumpangkeretaseat>[];
+List<Bookedkeretadata> databookedkereta = <Bookedkeretadata>[];
 
 var baseurl = "https://sandbox-api.sakedap.com/ppobtcel/";
 int vgadult;

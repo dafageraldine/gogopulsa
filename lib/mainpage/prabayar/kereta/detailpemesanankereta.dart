@@ -39,23 +39,69 @@ class _DetailpemesanankeretaState extends State<Detailpemesanankereta> {
         },
         body: bodyenc);
     var data = json.decode(ceks.body);
-    print(data);
+    print(data['data']['bookingKeyRequest']);
+    databookedkereta.clear();
+    databookedkereta.add(Bookedkeretadata(
+      data['data']['bookingKeyRequest'],
+      data['data']['trainID'],
+      data['data']['origin'],
+      data['data']['originFull'],
+      data['data']['destination'],
+      data['data']['destinationFull'],
+      data['data']['trainNumber'],
+      data['data']['subClass'],
+      data['data']['availabilityClass'],
+      data['data']['bookingCode'],
+      data['data']['bookingDate'],
+      data['data']['issuedTimeLimit'],
+      data['data']['trainName'],
+      data['data']['departTime'],
+      data['data']['arrivalTime'],
+      data['data']['ticketPrice'].toString(),
+      data['data']['salesPrice'].toString(),
+      data['data']['adminFee'].toString(),
+      data['data']['trainMarkup'].toString(),
+      data['data']['discount'].toString(),
+    ));
+    seatpenumpangkereta.clear();
+    for (var i = 0; i < data['data']['passengers'].length; i++) {
+      seatpenumpangkereta.add(Penumpangkeretaseat(
+          data['data']['passengers'][i]['name'],
+          data['data']['passengers'][i]['ID'].toString(),
+          data['data']['passengers'][i]['birthDate'],
+          data['data']['passengers'][i]['seatNumber'],
+          data['data']['passengers'][i]['wagonNumber'],
+          data['data']['passengers'][i]['wagonCode'],
+          data['data']['passengers'][i]['type'],
+          data['data']['passengers'][i]['phone']));
+    }
+    getseatmap();
   }
 
-  getseatmap() {
+  getseatmap() async {
     var body = {
-      "origin": datapesankereta[0].origin,
-      "destination": datapesankereta[0].destination,
-      "departDate": "2021-08-03T20:00:00",
-      "trainNumber": datapesankereta[0].trainumber,
-      "subClass": datapesankereta[0].subclass,
+      "origin": databookedkereta[0].origin,
+      "destination": databookedkereta[0].destination,
+      "departDate": databookedkereta[0].departTime,
+      "trainNumber": databookedkereta[0].trainNumber,
+      "subClass": databookedkereta[0].subClass,
       "paxAdult": vgadult.toString(),
       "paxChild": "0",
       "paxInfant": vginfant.toString(),
-      "bookingKeyRequest": bookedtrain[0].bookingkey,
-      "bookingCode": "H6OC4U",
-      "bookingDate": "2021-07-28"
+      "bookingKeyRequest": databookedkereta[0].bookingkey,
+      "bookingCode": databookedkereta[0].bookingCode,
+      "bookingDate": databookedkereta[0].bookingDate.split('T')[0]
     };
+    var url = baseurl + 'public/api/data/kereta/seatmap';
+    http.Response ceks = await http.post(Uri.parse(url),
+        headers: {
+          // HttpHeaders.contentTypeHeader: "application/json",
+          'apiKey':
+              '632e93023886160a2a5494cd49aeb72994fc61f6834355d175a423b99715a9df',
+        },
+        body: body);
+    var data = json.decode(ceks.body);
+    print(data);
   }
 
   @override
@@ -472,7 +518,7 @@ class _DetailpemesanankeretaState extends State<Detailpemesanankereta> {
                 ),
                 child: Center(
                     child: Text(
-                  "Pilih Kursi",
+                  "Lanjut",
                   style: TextStyle(
                       color: Colors.white,
                       fontFamily: 'Opensansbold',
