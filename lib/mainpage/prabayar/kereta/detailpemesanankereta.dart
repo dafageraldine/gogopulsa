@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:gogopulsa/mainpage/prabayar/kereta/checkout.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:gogopulsa/class.dart';
@@ -118,6 +119,9 @@ class _DetailpemesanankeretaState extends State<Detailpemesanankereta> {
         print(data['data']['seats'][i]['detail'][j]['seatColumn']);
       }
     }
+
+    Navigator.of(context, rootNavigator: true)
+        .push(MaterialPageRoute(builder: (context) => Checkout()));
   }
 
   @override
